@@ -49,8 +49,9 @@ _rsyslog_module:
 #   - load: immark
 
 # rsyslog_module is a sequence of mappings, each containing parameters for module()
+# To configure a server to receive logs, add either the imudp or imtcp modules.
 # e.g.
-# rsyslog_module: {load: "builtin:omfile", Template: "RSYSLOG_TraditionalFileFormat"}
+# rsyslog_module: [{load: "builtin:omfile", Template: "RSYSLOG_TraditionalFileFormat"},{load: imtcp, port: "514"}]
 rsyslog_module: "{{ _rsyslog_module[ansible_os_family] | default(_rsyslog_module['default']) }}"
 
 _rsyslog_include:
@@ -59,21 +60,6 @@ _rsyslog_include:
 
 # rsyslog_include is a sequence of fileglobs to include
 rsyslog_include: "{{ _rsyslog_include[ansible_os_family] | default(_rsyslog_include['default']) }}"
-
-_rsyslog_input:
-  default: {}
-  Debian: {}
-#   - type: imudp
-#     port: "514"
-#   - type: imtcp
-#     port: "514"
-
-# rsyslog_input is a sequence of mappings, each containing parameters to input()
-# To configure a server to receive logs, set rsyslog_input to
-# include imudp and/or imtcp.
-# e.g.
-# rsyslog_input: [{type: "imudp", port: 514}, {type: "imudp", port: 514}]
-rsyslog_input: "{{ _rsyslog_input[ansible_os_family] | default(_rsyslog_input['default']) }}"
 
 _rsyslog_rules:
   default:
@@ -147,17 +133,6 @@ _rsyslog_action:
 # rsyslog_action is a sequence of mappings, each containing parameters for action()
 # To forward logs to another server, add an item to rsyslog_action with type omfwd
 # e.g.
-# rsyslog_action: [{type: "omfwd", Target: "remote-host", port: 514, protocol: "tcp"}]
+# rsyslog_action: [{type: "omfwd", Target: "remote-host", port: 514, protocol: "tcp", queue.filename: fwdRule1, queue.maxDiskSpace: 1g, queue.saveOnShutdown: "on", queue.type: LinkedList, action.resumeRetryCount: "-1"}]
 rsyslog_action: "{{ _rsyslog_action[ansible_os_family] | default(_rsyslog_action['default']) }}"
 
-# Forwarding example
-# rsyslog_action:
-#     - type: "omfwd"
-#       Target: "remote-host"
-#       Port: "514"
-#       Protocol: "tcp"
-#       queue.filename: fwdRule1
-#       queue.maxDiskSpace: 1g
-#       queue.saveOnShutdown: "on"
-#       queue.type: LinkedList
-#       action.resumeRetryCount: "-1"
