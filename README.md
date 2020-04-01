@@ -122,7 +122,7 @@ _rsyslog_input:
 #     port: "514"
 
 # rsyslog_input is a sequence of mappings, each containing parameters to input()
-# To configure a server to receive logs, set rsyslog_input to 
+# To configure a server to receive logs, set rsyslog_input to
 # include imudp and/or imtcp.
 # e.g.
 # rsyslog_input: [{type: "imudp", port: 514}, {type: "imudp", port: 514}]
@@ -195,22 +195,25 @@ _rsyslog_rules:
 rsyslog_rules: "{{ _rsyslog_rules[ansible_os_family] | default(_rsyslog_rules['default']) }}"
 
 _rsyslog_action:
-  default:
-    - type: "omfwd"
-      Target: "remote-host"
-      Port: "514"
-      Protocol: "tcp"
-      queue.filename: fwdRule1
-      queue.maxDiskSpace: 1g
-      queue.saveOnShutdown: "on"
-      queue.type: LinkedList
-      action.resumeRetryCount: "-1"
+  default: []
 
 # rsyslog_action is a sequence of mappings, each containing parameters for action()
 # To forward logs to another server, add an item to rsyslog_action with type omfwd
 # e.g.
 # rsyslog_action: [{type: "omfwd", Target: "remote-host", port: 514, protocol: "tcp"}]
 rsyslog_action: "{{ _rsyslog_action[ansible_os_family] | default(_rsyslog_action['default']) }}"
+
+# Forwarding example
+# rsyslog_action:
+#     - type: "omfwd"
+#       Target: "remote-host"
+#       Port: "514"
+#       Protocol: "tcp"
+#       queue.filename: fwdRule1
+#       queue.maxDiskSpace: 1g
+#       queue.saveOnShutdown: "on"
+#       queue.type: LinkedList
+#       action.resumeRetryCount: "-1"
 ```
 
 ## Requirements
