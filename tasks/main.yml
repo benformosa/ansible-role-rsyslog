@@ -17,7 +17,7 @@
   template:
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
-    validate: /usr/sbin/rsyslogd -N 1 -f %s
+    validate: /usr/bin/env rsyslogd -N 1 -f %s
   notify:
     - restart rsyslog
 
