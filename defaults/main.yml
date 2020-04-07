@@ -135,4 +135,3 @@ _rsyslog_action:
 # e.g.
 # rsyslog_action: [{type: "omfwd", Target: "remote-host", port: 514, protocol: "tcp", queue.filename: fwdRule1, queue.maxDiskSpace: 1g, queue.saveOnShutdown: "on", queue.type: LinkedList, action.resumeRetryCount: "-1"}]
 rsyslog_action: "{{ _rsyslog_action[ansible_os_family] | default(_rsyslog_action['default']) }}"
-
